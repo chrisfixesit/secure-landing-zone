@@ -1,0 +1,22 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ProtectSecurityServices",
+      "Effect": "Deny",
+      "Action": [
+        "cloudtrail:StopLogging",
+        "cloudtrail:DeleteTrail",
+        "cloudtrail:UpdateTrail",
+        "config:DeleteConfigurationRecorder",
+        "config:DeleteDeliveryChannel",
+        "config:StopConfigurationRecorder",
+        "guardduty:DeleteDetector",
+        "guardduty:DisassociateFromMasterAccount",
+        "securityhub:DisableSecurityHub",
+        "securityhub:DisassociateFromMasterAccount"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
