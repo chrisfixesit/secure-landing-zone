@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: en-US
+tone_instructions: "Be concise. This is a security baseline: prioritise guardrail gaps and blast radius over style."
+
+reviews:
+  profile: assertive
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: true
+  auto_review:
+    enabled: true
+    drafts: false
+    ignore_title_keywords:
+      - "WIP"
+      - "[skip review]"
+
+  path_filters:
+    - "!**/.terraform/**"
+    - "!**/.terraform.lock.hcl"
+    - "!**/*.tfstate*"
+    - "!**/*.tfplan"
+
+  path_instructions:
+    - path: "**/*.tf"
+      instructions: >
+        These are reusable OpenTofu modules for a public-sector AWS landing zone.
+        Flag: IAM with wildcard Action or Resource, missing encryption (KMS) on
+        trails, buckets and logs, buckets without public access blocks, hardcoded
+        account IDs, regions or ARNs that should be variables, and missing
+        `description`/`type` on variables and outputs. Point out any change that
+        would destroy or recreate stateful or org-level resources (OUs, accounts,
+        CloudTrail, S3 log buckets, Config recorders), and whether `prevent_destroy`
+        or `moved` blocks are needed. Prefer provider-agnostic HCL that works on
+        both OpenTofu and Terraform.
+    - path: "policies/**/*.json"
+      instructions: >
+        These are Service Control Policies. Check that Deny statements cannot lock
+        out break-glass or management roles (look for an aws:PrincipalArn exception),
+        that region restrictions exempt global services (IAM, Organizations, STS,
+        CloudFront, Route 53, Support), and that the policy stays under the 5,120
+        character SCP limit. Flag any change that weakens an existing guardrail.
+    - path: "examples/**"
+      instructions: >
+        Examples should be copy-paste runnable: no real account IDs or emails, and
+        every required module input shown.
+    - path: "**/README.md"
+      instructions: >
+        Check that module inputs, outputs and the status table match the code.
+
+  tools:
+    gitleaks:
+      enabled: true
+    checkov:
+      enabled: true
+    tflint:
+      enabled: true
+    markdownlint:
+      enabled: true
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  learnings:
+    scope: global
