@@ -13,7 +13,7 @@ reviews:
     enabled: true
     drafts: false
     ignore_title_keywords:
-      - "WIP"
+      - "[WIP]"
       - "[skip review]"
 
   path_filters:
@@ -29,7 +29,7 @@ reviews:
         Flag: IAM with wildcard Action or Resource, missing encryption (KMS) on
         trails, buckets and logs, buckets without public access blocks, hardcoded
         account IDs, regions or ARNs that should be variables, and missing
-        `description`/`type` on variables and outputs. Point out any change that
+        `description`/`type` on variables and `description` on outputs. Point out any change that
         would destroy or recreate stateful or org-level resources (OUs, accounts,
         CloudTrail, S3 log buckets, Config recorders), and whether `prevent_destroy`
         or `moved` blocks are needed. Prefer provider-agnostic HCL that works on
